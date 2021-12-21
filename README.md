@@ -32,14 +32,14 @@ You can use this lib via dependency injection or his facade.
 ```php
 public function DepInj(TimerServiceInterface $timerService)
 {
-    $timerService->create(...);
+    $timerService->createTimer(...);
 }
 
 // or
 
 public function NoDepInj()
 {
-    Timer::create(...);
+    Timer::createTimer(...);
 }
 ```
 
@@ -50,7 +50,7 @@ public function NoDepInj()
  * - Creates a timer for user with id 1
  * - Times runs from now on for 60 seconds
  */
-Timer::create(new \DateTime(), '60', 'User', '1');
+Timer::createTimer(new \DateTime(), '60', 'User', '1');
 ```
 
 ### Get timer by owner

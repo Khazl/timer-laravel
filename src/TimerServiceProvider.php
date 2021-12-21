@@ -35,6 +35,11 @@ class TimerServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/timer.php', 'timer');
         $this->app->bind(TimerServiceInterface::class, TimerService::class);
+
+        // Register the service the package provides.
+        $this->app->singleton('timer', function ($app) {
+            return new TimerService();
+        });
     }
 
     /**
