@@ -1,5 +1,5 @@
 {
-    "name": "khazl/timer",
+    "name": "khazl/timer-laravel",
     "description": "Laravel package to work easy and reliable with timers / countdowns.",
     "license": "MIT",
     "authors": [
