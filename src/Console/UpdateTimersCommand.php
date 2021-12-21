@@ -42,26 +42,28 @@ class UpdateTimersCommand extends Command
         $now = Carbon::now();
 
         $timers = Timer::where('from', '<', $now)
-            ->whereNotIn('status', [config('timer.status.done'), config('timer.status.canceled')])
-            ->orWhereNull('status')
+            ->where(function ($query) {
+                $query->whereNotIn('status', [config('timer.status.done'), config('timer.status.canceled')])
+                    ->orWhereNull('status');
+            })
             ->get();
 
         $this->comment("Potential timers found: {$timers->count()}");
 
-        $counter = 0;
+        $batch = [];
         foreach ($timers as $timer) {
             // Flag as done
             $doneDate = Carbon::create($timer->from)->addSeconds($timer->duration);
             if ($doneDate->lessThan($now)) {
-                $timer->status = config('timer.status.done');
-
-                // TODO: Move this to a batch update instead of multiple single updates. Performance.
-                $timer->save();
-
-                $counter++;
+                $batch[] = $timer->id;
             }
         }
 
-        $this->info("Timers updated: {$counter}");
+        Timer::whereIn('id', $batch)
+            ->update([
+                'status' => config('timer.status.done')
+            ]);
+
+        $this->info('Timers updated: ' . count($batch));
     }
 }
