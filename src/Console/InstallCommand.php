@@ -35,8 +35,11 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        $this->comment('Publishing Config ...');
+        $this->comment('Publishing config ...');
         $this->callSilent('vendor:publish', ['--tag' => 'timer.config']);
+
+        $this->comment('Publishing migrations ...');
+        $this->callSilent('vendor:publish', ['--tag' => 'timer.migrations']);
 
         $this->info('Installation done. Have fun!');
     }

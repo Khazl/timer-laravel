@@ -64,6 +64,11 @@ class TimerServiceProvider extends ServiceProvider
             __DIR__.'/../config/timer.php' => config_path('timer.php'),
         ], 'timer.config');
 
+        // Publishing the migration files.
+        $this->publishes([
+            __DIR__.'/../database/migrations/2021_12_17_152634_create_timers_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_timers_table.php'),
+        ], 'timer.migrations');
+
         // Registering package commands.
         $this->commands([InstallCommand::class, ClearTimersCommand::class, UpdateTimersCommand::class]);
     }
