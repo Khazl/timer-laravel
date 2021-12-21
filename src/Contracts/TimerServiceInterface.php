@@ -18,4 +18,6 @@ interface TimerServiceInterface
     public function calculateTimerStatusByTimer(Timer $timer): int;
 
     public function cancelTimerByTimer(Timer $timer): void;
+
+    public function updateTimerStatusByTimer(Timer $timer, bool $autoSave = false): Timer;
 }

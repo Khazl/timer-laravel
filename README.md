@@ -95,6 +95,19 @@ Example return:
 ]
 ```
 
+### Get a timer instance with updated status
+
+```php
+$timers = Timer::getTimersByOwner('User', 1);
+$timers[0] = Timer::updateTimerStatusByTimer($timers[0]);
+```
+
+If you like to save this updated timer in the same rush, add a second parameter `true`:
+```php
+$timers = Timer::getTimersByOwner('User', 1);
+$timers[0] = Timer::updateTimerStatusByTimer($timers[0], true);
+```
+
 ### Cancel one specific timer
 
 ```php

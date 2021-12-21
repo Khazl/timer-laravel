@@ -87,6 +87,17 @@ class TimerService implements TimerServiceInterface
         $timer->save();
     }
 
+    public function updateTimerStatusByTimer(Timer $timer, bool $autoSave = false): Timer
+    {
+        $timer->status = $this->calculateTimerStatusByTimer($timer);
+
+        if ($autoSave && $timer->isDirty()) {
+            $timer->save();
+        }
+
+        return $timer;
+    }
+
     /*
     public function filterTimerByStatus(array $timers, string $status, string $mode = 'inclusive'): array
     {
