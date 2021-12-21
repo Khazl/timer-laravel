@@ -3,18 +3,18 @@
 ## Installation
 
 Get the package:
-``` bash
+```bash
 $ composer require khazl/timer
 ```
 
 Install the package in your laravel app:
-``` bash
+```bash
 $ php artisan timer:install
 $ php artisan migrate
 ```
 
 Run sanity commands:
-``` bash
+```bash
 $ php artisan timer:update
 $ php artisan timer:clear
 ```
@@ -53,7 +53,7 @@ public function NoDepInj()
 Timer::createTimer(new \DateTime(), '60', 'User', '1');
 ```
 
-### Get timer by owner
+### Get timers by owner
 
 ```php
 /*
@@ -66,6 +66,8 @@ Timer::getTimersByOwner('User', '1');
  */
 Timer::getTimersByOwner('User', '1', false);
 ```
+
+Returns a `Collection` of `Timer`.
 
 ### Calculate the actual status of a timer
 
@@ -83,6 +85,14 @@ $timers = Timer::getTimersByOwner('User', 1);
 foreach ($timers as $timer) {
     dump(Timer::getRemainingByTimer($timer));
 }
+```
+
+Example return: 
+```
+[
+  "finish_at" => \DateTime,
+  "seconds" => 59
+]
 ```
 
 ### Cancel one specific timer
