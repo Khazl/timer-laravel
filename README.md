@@ -53,6 +53,21 @@ public function NoDepInj()
 Timer::createTimer(new \DateTime(), '60', 'User', '1');
 ```
 
+You can also create a `Timer` with a payload:
+```php
+Timer::createTimer(new \DateTime(), '60', 'User', '1', [
+    'type' => 'timeout',
+    'reason' => 'Violate the terms of use'
+]);
+
+Timer::createTimer(new \DateTime(), '604800', 'Invoice', '125', [
+    'kind' => 'reminder',
+    'channel' => 'sms'
+]);
+```
+It's completely up to you, what information you want to pass as payload.  
+Create a payload schema that fits your needs.
+
 ### Get timers by owner
 
 ```php
@@ -88,7 +103,7 @@ foreach ($timers as $timer) {
 ```
 
 Example return: 
-```
+```php
 [
   "finish_at" => \DateTime,
   "seconds" => 59
