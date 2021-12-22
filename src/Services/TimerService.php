@@ -6,6 +6,7 @@ namespace Khazl\Timer\Services;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 use Khazl\Timer\Contracts\TimerServiceInterface;
 use Khazl\Timer\Models\Timer;
 
@@ -47,8 +48,17 @@ class TimerService implements TimerServiceInterface
 
     private function validateTimer(Timer $timer): bool
     {
-        // TODO: Add validation rules for timers.
-        return true;
+        $timer = $timer->toArray();
+
+        $validator = Validator::make($timer, [
+            'from' => ['required', 'date'],
+            'duration' => ['required', 'numeric', 'min:1'],
+            'owner_type' => ['required', 'string'],
+            'owner_id' => ['required', 'string_or_int'],
+            'payload' => ['array'],
+        ]);
+
+        return !$validator->fails();
     }
 
     public function getRemainingByTimer(Timer $timer): array

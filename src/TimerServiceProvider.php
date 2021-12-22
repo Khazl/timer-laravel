@@ -2,6 +2,7 @@
 
 namespace Khazl\Timer;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Khazl\Timer\Console\ClearTimersCommand;
 use Khazl\Timer\Console\InstallCommand;
@@ -19,6 +20,10 @@ class TimerServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        Validator::extend('string_or_int', function ($attribute, $value) {
+            return is_string($value) || is_integer($value);
+        });
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
