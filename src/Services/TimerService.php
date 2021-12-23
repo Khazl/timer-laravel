@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 use Khazl\Timer\Contracts\TimerServiceInterface;
 use Khazl\Timer\Models\Timer;
+use Khazl\Timer\TimerStatusEnum;
 
 class TimerService implements TimerServiceInterface
 {
@@ -19,8 +20,8 @@ class TimerService implements TimerServiceInterface
 
         if ($onlyOpen) {
             $timers = $timers->whereNotIn('status', [
-                config('timer.status.done'),
-                config('timer.status.canceled')
+                TimerStatusEnum::Done,
+                TimerStatusEnum::Canceled
             ])
                 ->orWhereNull('status');
         }
@@ -76,24 +77,24 @@ class TimerService implements TimerServiceInterface
         $remaining = $this->getRemainingByTimer($timer);
 
         // Timer is already handled.
-        if ($timer->status === config('timer.status.done') || $timer->status === config('timer.status.canceled')) {
+        if ($timer->status === TimerStatusEnum::Done || $timer->status === TimerStatusEnum::Canceled) {
             return $timer->status;
         }
 
         if ($remaining['seconds'] < 0) {
-            return config('timer.status.done');
+            return TimerStatusEnum::Done;
         }
 
         if ($remaining['seconds'] > 0 && $remaining['seconds'] < $timer->duration) {
-            return config('timer.status.running');
+            return TimerStatusEnum::Running;
         }
 
-        return config('timer.status.pending');
+        return TimerStatusEnum::Pending;
     }
 
     public function cancelTimerByTimer(Timer $timer): void
     {
-        $timer->status = config('timer.status.canceled');
+        $timer->status = TimerStatusEnum::Canceled;
         $timer->save();
     }
 

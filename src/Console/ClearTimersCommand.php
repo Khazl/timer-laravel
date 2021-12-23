@@ -5,6 +5,7 @@ namespace Khazl\Timer\Console;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Khazl\Timer\Models\Timer;
+use Khazl\Timer\TimerStatusEnum;
 
 class ClearTimersCommand extends Command
 {
@@ -49,7 +50,7 @@ class ClearTimersCommand extends Command
         $this->comment("Deleting timers which are done or canceled and not updated since {$thresholdDate}");
 
         $deleted = Timer::where('updated_at', '<', $thresholdDate)
-            ->whereIn('status', [config('timer.status.done'), config('timer.status.canceled')])
+            ->whereIn('status', [TimerStatusEnum::Done, TimerStatusEnum::Canceled])
             ->delete();
 
         $this->info("Timers deleted: {$deleted}");

@@ -5,6 +5,7 @@ namespace Khazl\Timer\Console;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Khazl\Timer\Models\Timer;
+use Khazl\Timer\TimerStatusEnum;
 
 class UpdateTimersCommand extends Command
 {
@@ -43,7 +44,7 @@ class UpdateTimersCommand extends Command
 
         $timers = Timer::where('from', '<', $now)
             ->where(function ($query) {
-                $query->whereNotIn('status', [config('timer.status.done'), config('timer.status.canceled')])
+                $query->whereNotIn('status', [TimerStatusEnum::Done, TimerStatusEnum::Canceled])
                     ->orWhereNull('status');
             })
             ->get();
@@ -61,7 +62,7 @@ class UpdateTimersCommand extends Command
 
         Timer::whereIn('id', $batch)
             ->update([
-                'status' => config('timer.status.done')
+                'status' => TimerStatusEnum::Done
             ]);
 
         $this->info('Timers updated: ' . count($batch));
