@@ -52,7 +52,7 @@ class TimerService implements TimerServiceInterface
 
         $validator = Validator::make($timer, [
             'from' => ['required', 'date'],
-            'duration' => ['required'],
+            'duration' => ['required', 'dateinterval'],
             'owner_type' => ['required', 'string'],
             'owner_id' => ['required', 'string_or_int'],
             'payload' => ['array'],

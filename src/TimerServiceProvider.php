@@ -2,6 +2,7 @@
 
 namespace Khazl\Timer;
 
+use DateInterval;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Khazl\Timer\Console\ClearTimersCommand;
@@ -23,6 +24,10 @@ class TimerServiceProvider extends ServiceProvider
 
         Validator::extend('string_or_int', function ($attribute, $value) {
             return is_string($value) || is_integer($value);
+        });
+
+        Validator::extend('dateinterval', function ($attribute, $value) {
+            return is_object($value) && get_class($value) === DateInterval::class;
         });
 
         // Publishing is only necessary when using the CLI.
