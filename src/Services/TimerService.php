@@ -39,12 +39,12 @@ class TimerService implements TimerServiceInterface
         $timer->owner_id = $ownerId;
         $timer->payload = $payload;
 
-        if ($this->validateTimer($timer)) {
-            $timer->save();
-            return $timer;
-        } else {
+        if (!$this->validateTimer($timer)) {
             throw new Exception('Timer is not valid.');
         }
+
+        $timer->save();
+        return $timer;
     }
 
     private function validateTimer(Timer $timer): bool
