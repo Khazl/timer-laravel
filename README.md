@@ -50,17 +50,17 @@ public function NoDepInj()
  * - Creates a timer for user with id 1
  * - Times runs from now on for 60 seconds
  */
-Timer::createTimer(new \DateTime(), 60, 'User', '1');
+Timer::createTimer(new \DateTime(), new \DateInterval('PT60S'), 'User', '1');
 ```
 
 You can also create a `Timer` with a payload:
 ```php
-Timer::createTimer(new \DateTime(), 60, 'User', '1', [
+Timer::createTimer(new \DateTime(), new \DateInterval('PT60S'), 'User', '1', [
     'type' => 'timeout',
     'reason' => 'Violate the terms of use'
 ]);
 
-Timer::createTimer(new \DateTime(), 604800, 'Invoice', '125', [
+Timer::createTimer(new \DateTime(), new \DateInterval('P7D'), 'Invoice', '125', [
     'kind' => 'reminder',
     'channel' => 'sms'
 ]);

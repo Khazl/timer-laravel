@@ -9,7 +9,7 @@ interface TimerServiceInterface
 {
     public function getTimersByOwner(string $ownerType, string|int $ownerId, bool $onlyOpen = true): Collection;
 
-    public function createTimer(\DateTime $from, int $duration, string $ownerType, int $ownerId, array $payload = []): ?Timer;
+    public function createTimer(\DateTime $from, \DateInterval $duration, string $ownerType, int $ownerId, array $payload = []): ?Timer;
 
     // public function filterTimerByStatus(array $timers, string $status, string $mode): array;
 

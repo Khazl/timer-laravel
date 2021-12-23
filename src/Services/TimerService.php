@@ -3,7 +3,6 @@
 
 namespace Khazl\Timer\Services;
 
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +28,7 @@ class TimerService implements TimerServiceInterface
         return $timers->get();
     }
 
-    public function createTimer(\DateTime $from, int $duration, string $ownerType, int $ownerId, array $payload = []): ?Timer
+    public function createTimer(\DateTime $from, \DateInterval $duration, string $ownerType, int $ownerId, array $payload = []): ?Timer
     {
         $timer = new Timer();
 
@@ -53,7 +52,7 @@ class TimerService implements TimerServiceInterface
 
         $validator = Validator::make($timer, [
             'from' => ['required', 'date'],
-            'duration' => ['required', 'numeric', 'min:1'],
+            'duration' => ['required'],
             'owner_type' => ['required', 'string'],
             'owner_id' => ['required', 'string_or_int'],
             'payload' => ['array'],
@@ -62,13 +61,19 @@ class TimerService implements TimerServiceInterface
         return !$validator->fails();
     }
 
+    private function getDurationInSecondsByTimer(Timer $timer)
+    {
+        $finishDate = (clone $timer->from)->add($timer->duration);
+        return $finishDate->getTimestamp() - $timer->from->getTimestamp();
+    }
+
     public function getRemainingByTimer(Timer $timer): array
     {
-        $finishDate = Carbon::create($timer->from)->addSeconds($timer->duration);
+        $finishDate = $timer->from->add($timer->duration);
 
         return [
-            'finish_at' => $finishDate->toDateTime(),
-            'seconds' => Carbon::now()->diffInSeconds($finishDate, false)
+            'finish_at' => $finishDate,
+            'seconds' => $finishDate->getTimestamp() - (new \DateTime())->getTimestamp()
         ];
     }
 
@@ -85,7 +90,7 @@ class TimerService implements TimerServiceInterface
             return TimerStatusEnum::Done;
         }
 
-        if ($remaining['seconds'] > 0 && $remaining['seconds'] < $timer->duration) {
+        if ($remaining['seconds'] > 0 && $remaining['seconds'] < $this->getDurationInSecondsByTimer($timer)) {
             return TimerStatusEnum::Running;
         }
 

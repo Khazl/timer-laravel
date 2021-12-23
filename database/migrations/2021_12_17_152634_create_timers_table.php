@@ -18,7 +18,7 @@ class CreateTimersTable extends Migration
             $table->string('owner_type');
             $table->string('owner_id');
             $table->dateTime('from')->index();
-            $table->unsignedBigInteger('duration');
+            $table->string('duration');
             $table->tinyInteger('status')->nullable()->index();
             $table->json('payload');
             $table->timestamps();
