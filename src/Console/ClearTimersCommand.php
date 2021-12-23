@@ -50,7 +50,7 @@ class ClearTimersCommand extends Command
         $this->comment("Deleting timers which are done or canceled and not updated since {$thresholdDate}");
 
         $deleted = Timer::where('updated_at', '<', $thresholdDate)
-            ->whereIn('status', [TimerStatusEnum::Done, TimerStatusEnum::Canceled])
+            ->whereIn('status', TimerStatusEnum::AlreadyHandled)
             ->delete();
 
         $this->info("Timers deleted: {$deleted}");

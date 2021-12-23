@@ -44,7 +44,7 @@ class UpdateTimersCommand extends Command
 
         $timers = Timer::where('from', '<', $now)
             ->where(function ($query) {
-                $query->whereNotIn('status', [TimerStatusEnum::Done, TimerStatusEnum::Canceled])
+                $query->whereNotIn('status', TimerStatusEnum::AlreadyHandled)
                     ->orWhereNull('status');
             })
             ->get();

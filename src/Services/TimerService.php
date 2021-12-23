@@ -77,7 +77,7 @@ class TimerService implements TimerServiceInterface
         $remaining = $this->getRemainingByTimer($timer);
 
         // Timer is already handled.
-        if ($timer->status === TimerStatusEnum::Done || $timer->status === TimerStatusEnum::Canceled) {
+        if (in_array($timer->status, TimerStatusEnum::AlreadyHandled)) {
             return $timer->status;
         }
 
