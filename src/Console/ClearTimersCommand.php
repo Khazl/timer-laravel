@@ -42,7 +42,7 @@ class ClearTimersCommand extends Command
 
         if (!config('timer.delete_after_seconds')) {
             $this->error('Please set a deletion time threshold in your config. Check docu for help.');
-            exit;
+            return 1;
         }
 
         $thresholdDate = Carbon::now()->subSeconds(config('timer.delete_after_seconds'));
